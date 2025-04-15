@@ -12,4 +12,6 @@ Function names are handled differently. In C++ assembly, function names are modi
 to provide extra information, such as the class which the function belongs.
 In C assembly, the function name remains largely the same.
 
-Otherwise, the two do not look extraordinarily different from one another.
+Otherwise, the two do not look extraordinarily different from one another. Labels,
+function names contain different information but are otherwise similar, movl, leal, addl, etc
+all remain between the two of them, along with %eax/%edx/etc.
