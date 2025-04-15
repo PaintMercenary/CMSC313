@@ -1,0 +1,15 @@
+For basic.c, the variables being defined in the assembly code resemble that of how
+they are declared in C. They're all separated, and they're output in order
+of the order of declaration. Included in assembly are indicators things that we'd consider
+muscle memory, such as whether or not a varirable is global. Instead of int/string/etc,
+.long, .ascii and .byte are used to indicate data type.
+
+Additionally, instead of a loop being on a single line, the different
+mechanisms of the loop will be in different parts of the assembly code.
+
+As for differences between C and C++ assembly code:
+Function names are handled differently. In C++ assembly, function names are modified
+to provide extra information, such as the class which the function belongs.
+In C assembly, the function name remains largely the same.
+
+Otherwise, the two do not look extraordinarily different from one another.
