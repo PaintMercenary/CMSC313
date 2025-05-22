@@ -1,0 +1,95 @@
+section .data
+    inputBuffer db 0x83, 0x6A, 0x88, 0xDE, 0x9A, 0xC3, 0x54, 0x9A
+    lineCharacter db 0xA
+
+section .bss
+    outputBuffer resb 80
+
+section .text
+    global _start
+
+_start:
+    mov esi, inputBuffer
+    mov edi, outputBuffer
+    mov ecx, 8
+
+    cmp ecx, 0
+    je prepPrint
+
+convertLoop:
+;Grabbing and saving a byte
+    mov al, byte [esi]
+    mov bl, al
+
+;Grabbing high nibble
+    shr al, 4
+
+    ;Converting to ASCII
+    cmp al, 9
+    jg highConvert
+    add al, '0'
+    jmp holdHighNibble
+
+;Subtract 10, add A
+highConvert:
+    sub al, 10
+    add al, 'A'
+
+;Holding high nibble in the output buffer.
+holdHighNibble:
+    mov [edi], al
+    inc edi
+
+    ;Checking low nibble
+    mov al, bl
+    and al, 0x0F
+
+    cmp al, 9
+    jg lowConvert
+    add al, '0'
+    jmp holdLowNibble
+
+;Subtract 10, add A
+lowConvert:
+    sub al, 10
+    add al, 'A'
+
+;Holding low nibble in output buffer.
+holdLowNibble:
+    mov [edi], al
+    inc edi
+
+    ;Going through the buffer to check whats been processed
+    inc esi
+    dec ecx
+    cmp ecx, 0
+    je prepPrint
+
+    mov byte [edi], ' '
+    inc edi
+
+    jmp convertLoop
+
+prepPrint:
+    mov edx, edi
+    sub edx, outputBuffer
+
+    cmp edx, 0
+    je printLine
+
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, outputBuffer
+    int 0x80
+
+printLine:
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, lineCharacter
+    mov edx, 1
+    int 0x80
+
+exit:
+    mov eax, 1
+    xor ebx, ebx
+    int 0x80
